@@ -1,0 +1,111 @@
+#include <cstdio>
+#include <algorithm>
+
+using namespace std;
+
+const int N=10005;
+
+struct Node {
+	int v,sz,flag;
+	Node *fa,*ch[2];
+	
+	void pushDown() {
+		if (flag) {
+			ch[0]->flag^=1;
+			ch[1]->flag^=1;
+			flag=0;
+			swap(ch[0],ch[1]);
+		}
+	}	
+
+	void pushUp() {
+		sz=1+ch[0]->sz+ch[1]->sz;
+	}
+	
+	int dir() {
+		return fa->ch[1]==this;
+	}	
+}pool[N],*null;
+
+int n=0,m=0;
+int a[N];
+int cnt=1;
+int ans[N];
+
+void build(int l,int r,Node* fa,int son) {
+	if (l<=r) {
+		int mid=(l+r)>>1;
+		Node* cur=pool+cnt++;
+		cur->fa=fa;
+		if (fa!=null)
+			fa->ch[son]=cur;
+		cur->flag=0;
+		cur->v=mid;
+		cur->ch[0]=cur->ch[1]=null;
+		cur->sz=1;
+		build(l,mid-1,cur,0);
+		build(mid+1,r,cur,1);
+		cur->pushUp();	
+	}	
+}
+
+inline void init() {
+	null=pool;
+	null->v=null->sz=null->flag=0;
+	null->fa=null->ch[0]=null->ch[1]=null;
+	build(0,n+1,null,0);	
+} 
+
+void dfs(Node* p) {
+	if (p!=null) {
+		p->pushDown();
+		dfs(p->ch[0]);
+		ans[cnt++]=a[p->v];
+		dfs(p->ch[1]);
+	}
+}
+
+inline void print() {
+	cnt=0;
+	dfs(pool+1);
+	for (int i=1;i<=n;++i)
+		printf(i==n?"%d\n":"%d ",ans[i]);	
+}
+
+inline void rotate(Node* p) {
+	
+}
+
+void splay(Node* p,Node* fa) {
+	while (p->fa!=fa) {
+		if (p->fa->fa==fa)
+			rotate(p);
+		else {
+			if (p->fa)
+		}
+	}
+}
+
+int find() {
+	
+}
+
+inline void reverse(int l,int r) {
+	
+	splay(find(l-1),null);
+	splay(find(r+1),)
+}
+
+int main(void) {
+	scanf("%d %d",&n,&m);
+	for (int i=1;i<=n;++i)
+		scanf("%d",a+i);
+	init();	
+	while (m--) {
+		int l=0,r=0;
+		scanf("%d %d",&l,&r);
+		reverse(l,r);
+	}
+	print();
+	return 0;
+} 
