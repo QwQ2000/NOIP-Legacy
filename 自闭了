@@ -1,0 +1,85 @@
+#include <cstdio>
+#include <algorithm>
+#include <cctype>
+
+using namespace std;
+
+const int N=100005,INF=N+233;
+
+char buf[1000000],*sss=buf,*eof;
+int t=0,n=0,c=0,a[N],ans1=INF,ans2=INF,i=0,j=0,f1=0,f2=0,x=0;
+long long s=0;
+
+inline void reeed(int& v) {
+		v=0;
+        int flag=1;
+        while (!isdigit(*sss) && *sss!='-')
+			++sss;
+		if (eof<=sss)
+			return;
+        if (*sss=='-') {
+			flag=-1;
+			sss++;
+		}
+        while (isdigit(*sss))
+			v=v*10+*sss++-'0';
+        v*=flag;
+}
+
+int main(void) {
+	eof=sss+fread(buf,1,1000000,stdin);
+	reeed(t);
+	while (t--) {
+		reeed(n);
+		reeed(c);
+		for (i=0;i<n;++i) {
+			reeed(a[i]);
+		}
+		for (i=0;i<n;++i) {
+			reeed(x);
+			a[i]-=x;
+		}
+		
+		s=c;
+		i=j=f1=0;
+		int fuck=0;
+		do {
+			fuck=0;
+			s+=a[j];
+			if (s<0) {
+				i=j=j+1;
+				s=c;
+				fuck=1;
+				if (i==n) {
+					f1=1;
+					break;
+				}
+			} else  
+ 				j=(j+1)%n;
+		} while(j!=i || fuck);
+		ans1=f1?INF:i+1;
+		
+		s=c;
+		i=j=0;
+		f2=0;
+		do {
+			s+=a[j];
+			while (s<0) {
+				if (i%n==j) {
+					f2=1;
+					break;		
+				}
+				s+=a[++i];
+			}
+			if (f2)
+				break;
+			j=(j+n-1)%n;
+		} while (i!=j||f2);
+		ans2=f2?INF:i+1;
+		if (f1 && f2) 
+			printf("-1\n");
+		else 
+			printf("%d\n",min(ans1,ans2));
+	}	
+	return 0;
+}
